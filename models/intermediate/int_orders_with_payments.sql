@@ -13,7 +13,7 @@ order_payments as (
         order_id,
         count(case when payment_status = 'success' and is_refund = false then 1 end) as successful_payments_count,  -- успешные оплаты без возвратов
         sum(case when payment_status = 'success' and is_refund = false then amount else 0 end) as paid_amount,                -- их сумма; 0, если их нет
-        sum(case when is_refund = true then amount else 0 end) as refunded_amount,            -- сумма возвратов положительным числом; 0, если их нет
+        sum(case when is_refund = true then abs(amount) else 0 end) as refunded_amount,            -- сумма возвратов положительным числом; 0, если их нет
         min(case when payment_status = 'success' and is_refund = false then paid_at end)  as first_paid_at               -- время первой успешной оплаты
     from payments
     group by order_id
