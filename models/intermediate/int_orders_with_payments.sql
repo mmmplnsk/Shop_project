@@ -11,10 +11,10 @@ payments as (
 order_payments as (
     select
         order_id,
-        TODO    as successful_payments_count,  -- успешные оплаты без возвратов
-        TODO    as paid_amount,                -- их сумма; 0, если их нет
-        TODO    as refunded_amount,            -- сумма возвратов положительным числом; 0, если их нет
-        TODO    as first_paid_at               -- время первой успешной оплаты
+        count(case when payment_status = 'success' and is_refund = false then 1 end) as successful_payments_count,  -- успешные оплаты без возвратов
+        sum(case when payment_status = 'success' and is_refund = false then amount else 0 end) as paid_amount,                -- их сумма; 0, если их нет
+        sum(case when is_refund = true then amount else 0 end) as refunded_amount,            -- сумма возвратов положительным числом; 0, если их нет
+        min(case when payment_status = 'success' and is_refund = false then paid_at end)  as first_paid_at               -- время первой успешной оплаты
     from payments
     group by order_id
 )
@@ -27,12 +27,12 @@ select
     o.order_status,
     o.order_amount,
     o.is_test_order,
-    TODO    as successful_payments_count,   -- 0 вместо null
-    TODO    as paid_amount,
-    TODO    as refunded_amount,
-    TODO    as net_paid_amount,             -- оплачено минус возвращено
+    p.successful_payments_count  as successful_payments_count,   -- 0 вместо null
+    p.paid_amount as paid_amount,
+    p.refunded_amount    as refunded_amount,
+    p.paid_amount - p.refunded_amount    as net_paid_amount,             -- оплачено минус возвращено
     p.first_paid_at,
-    TODO    as is_confirmed                 -- статус paid и хотя бы одна успешная оплата
+    (o.order_status = 'paid' and p.successful_payments_count > 0) as is_confirmed                 -- статус paid и хотя бы одна успешная оплата
 from orders as o
-TODO join order_payments as p
+left join order_payments as p
     on p.order_id = o.order_id
