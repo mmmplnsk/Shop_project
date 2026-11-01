@@ -1,0 +1,44 @@
+models:
+  - name: fct_orders
+    description: "Фактовая таблица заказов. Одна строка - один заказ"
+    columns:
+      - name: order_id
+        description:  "Номер заказа"
+        data_tests:
+          - unique
+          - not_null
+      
+      - name: customer_id
+        description: "Идентификатор клиента"
+
+      - name: order_date
+        description: "Дата создания заказа"
+
+      - name: ordered_at
+        description: "Время создания заказа"
+
+      - name: order_status
+        description: "Статус заказа"
+
+      - name: order_amount
+        description: "Сумма заказа"
+
+      - name: paid_amount
+        description: "Сумма успешных платажей"
+
+      - name: refunded_amount
+        description: "Сумма возвратных платежей"
+
+      - name: net_paid_amount
+        description: "Сумма успешных платежей - сумма возвратных"
+
+      - name: successful_payments_count
+        description: "Число успешных платежей"
+
+      - name: first_paid_at
+        description: "Дата первого успешного платежа"
+
+      - name: is_confirmed
+        description: "Заказ с > 0 успешных оплат"
+        data_tests:
+          - not_null
