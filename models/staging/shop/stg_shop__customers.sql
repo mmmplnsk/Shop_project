@@ -7,7 +7,7 @@ with source as (
 select
     customer_id,
     registered_at,
-    TODO                            as registration_date,  -- дата без времени
+    DATE(registered_at) as registration_date,  -- дата без времени
     city,
     acquisition_channel
 from source
