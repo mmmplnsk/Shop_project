@@ -10,15 +10,77 @@ models:
       - name: order_id
         description: "Номер заказа."
         data_tests: [unique, not_null]
+
       - name: customer_id
         description: "Клиент, оформивший заказ."
         data_tests:
           - not_null
-          # TODO: relationships — каждый customer_id есть в stg_shop__customers
+          - relationships:
+              arguments:
+                to: ref('stg_shop__customers')
+                field: customer_id
+
       - name: order_status
         description: "Статус заказа."
-        # TODO: accepted_values
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['paid', 'pending', 'returned', 'cancelled']
       - name: order_amount
         description: "Сумма заказа в рублях после скидок."
 
-  # TODO: stg_shop__customers, stg_shop__order_items, stg_shop__payments
+
+  - name: stg_shop__customers
+    description: "Клиенты из источника: одна строка - один клиент"
+    columns:
+      - name: customer_id
+        description: "Идентификатор клиента"
+        data_tests:
+          - unique
+          - not_null
+
+  
+  - name: stg_shop__order_items
+    description: "Товары в заказе: одна строка - позиция в заказе"
+    columns:
+      - name: order_id
+        description: "Номер заказа"
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_shop__orders')
+                field: order_id
+      
+      - name: order_item_id
+        description: "Идентификатор заказ - позиция"
+        data_tests:
+          - not_null
+          - unique
+
+
+  - name: stg_shop__payments
+    description: "Одна строка - один платёж"
+    columns:
+      - name: payment_id
+        description: "Номер платежа"
+        data_tests:
+          - unique
+          - not_null
+
+      - name: order_id
+        description: "Номер заказа"
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_shop__orders')
+                field: order_id
+
+      - name: payment_status
+        description: "Статус платежа" 
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['success', 'failed', 'pending']
+             
