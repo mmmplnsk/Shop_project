@@ -42,3 +42,21 @@ models:
         description: "Заказ с > 0 успешных оплат"
         data_tests:
           - not_null
+
+  
+  - name: dim_dates
+    description: "Календарное измерение. Одна строка - один календарный день"
+    columns:
+      - name: date_day
+        description: "Календарная дата"
+        data_tests:
+          - not_null
+          - unique
+          
+      - name: is_weekend
+        description: "Флаг выходного дня"
+        data test:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [true, false]
