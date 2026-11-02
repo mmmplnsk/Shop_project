@@ -83,4 +83,24 @@ models:
           - accepted_values:
               arguments:
                 values: ['success', 'failed', 'pending']
-             
+
+
+  - name: stg_shop__products
+    description: "Одна строка - один товар"
+    columns:
+      - name: product_id
+        description: "Идентификатор товара"
+        data_tests:
+          - unique,
+          - not_null
+      
+      - name: category_id
+        description: "Номер категории товара"
+        data_tests:
+          - not_null
+      
+      - name: brand
+        description: "Изготовитель товара"
+
+      - name: product_name
+        description: "Имя товара"
