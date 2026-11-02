@@ -33,6 +33,7 @@ stg_product_categories as(
 )
 
 select
+    p.product_id,
     p.product_name,
     p.brand,
     ct.category_name,

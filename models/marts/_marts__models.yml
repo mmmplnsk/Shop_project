@@ -52,7 +52,7 @@ models:
         data_tests:
           - not_null
           - unique
-          
+
       - name: is_weekend
         description: "Флаг выходного дня"
         data test:
@@ -60,3 +60,28 @@ models:
           - accepted_values:
               arguments:
                 values: [true, false]
+
+  - name: dim_products
+    description: "Одна строка - один факт о товаре"
+    columns:
+      - name: product_id
+        description: "Номер товара"
+        data_tests:
+          - unique
+          - not_null
+          
+      - name: product_name
+        description: "Имя товара"
+
+      - name: brand
+        description: "Изготовитель товара"
+
+      - name: category_name
+        description: "Имя категории"
+
+      - name: parent_category_name
+        description: "Имя родительской категории (если есть)"
+
+      - name: root_category_name
+        description: "Имя первичной категории"
+

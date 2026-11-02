@@ -1,0 +1,1 @@
+select * from {{ref('int_category_tree_with_products')}}
