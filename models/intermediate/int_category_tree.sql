@@ -33,9 +33,15 @@ stg_product_categories as(
 )
 
 select
-    category_id,
-    category_name,
-    parent_category_id,
-    root_category_id
-from
-    category_tree
+    p.product_name,
+    p.brand,
+    ct.category_name,
+    pct.category_name as parent_category_name,
+    rct.category_name as root_category_name
+from {{ref('stg_shop__products')}} p
+left join category_tree ct on p.category = ct.category_name
+left join category_tree pct on ct.parent_category_id = pct.category_id
+left join category_tree rct on ct.root_category_id = rct.category_id
+
+
+
