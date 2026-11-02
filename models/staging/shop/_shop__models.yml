@@ -98,9 +98,29 @@ models:
         description: "Номер категории товара"
         data_tests:
           - not_null
+          - relationships:
+              arguments:
+                to: stg_shop__product_categories
+                field: category_id
       
       - name: brand
         description: "Изготовитель товара"
 
       - name: product_name
         description: "Имя товара"
+
+
+  - name: stg_shop__product_categories
+    description: "Одна строка - одна категория товара"
+    columns:
+      - name: category_id
+        description: "Номер категории товара"
+        data_tests:
+          - unique
+          - not_null
+      
+      - name: parent_category_id
+        description: "Номер общей категории товара (если есть)"
+
+      - name: category_name
+        description: "Название категории товара"
