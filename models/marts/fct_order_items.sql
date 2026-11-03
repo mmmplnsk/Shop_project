@@ -1,4 +1,5 @@
 select
+    order_id,
     product_id,
     customer_id,
     quantity,

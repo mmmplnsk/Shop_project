@@ -2,6 +2,7 @@ models:
   - name: fct_orders
     description: "Фактовая таблица заказов. Одна строка - один заказ"
     columns:
+
       - name: order_id
         description:  "Номер заказа"
         data_tests:
@@ -10,27 +11,48 @@ models:
       
       - name: customer_id
         description: "Идентификатор клиента"
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
 
       - name: order_date
         description: "Дата создания заказа"
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_dates')
+                field: date_day
 
       - name: ordered_at
         description: "Время создания заказа"
 
       - name: order_status
         description: "Статус заказа"
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['paid', 'pending', 'returned', 'cancelled']
 
       - name: order_amount
         description: "Сумма заказа"
 
       - name: paid_amount
         description: "Сумма успешных платажей"
+        data_tests:
+          - assert_is_non_negative
 
       - name: refunded_amount
         description: "Сумма возвратных платежей"
+        data_tests: 
+          - assert_is_non_negative
 
       - name: net_paid_amount
         description: "Сумма успешных платежей - сумма возвратных"
+        data_tests:
+          - assert_is_non_negative
 
       - name: successful_payments_count
         description: "Число успешных платежей"
@@ -45,11 +67,14 @@ models:
       
       - name: items_count
         description: "Число различных товаров в заказе"
+        data_tests:
+          - assert_is_non_negative
 
   
   - name: dim_dates
     description: "Календарное измерение. Одна строка - один календарный день"
     columns:
+
       - name: date_day
         description: "Календарная дата"
         data_tests:
@@ -58,15 +83,35 @@ models:
 
       - name: is_weekend
         description: "Флаг выходного дня"
-        data test:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
                 values: [true, false]
 
+      - name: year
+        description: "Год (int)"
+
+      - name: quarter
+        description: "Номер сезона"
+
+      - name: month
+        description: "Номер месяца"
+
+      - name: month_name
+        description: "Название месяца"
+
+      - name: day_of_week_num
+        description: "Номер дня недели (1-пн, 7-вс)"
+
+      - name: day_of_week_name
+        description: "Название дня недели"
+
+
   - name: dim_products
-    description: "Одна строка - один факт о товаре"
+    description: "Одна строка - один товар"
     columns:
+
       - name: product_id
         description: "Номер товара"
         data_tests:
@@ -92,11 +137,33 @@ models:
   - name: fct_order_items
     description: "Одна строка - одна позиция в заказе"
     columns:
+
+      - name: order_id
+        description: "Номер заказа"
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('fct_orders')
+                field: order_id
+
       - name: product_id
         description: "Номер товара"
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_products')
+                field: product_id
 
       - name: customer_id
         description: "Идентификатор клиента"
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
 
       - name: quantity
         description: "Количество товара"
@@ -104,7 +171,7 @@ models:
       - name: unit_price
         description: "Цена за штуку товара"
 
-      - name: discount_amount,
+      - name: discount_amount
         description: "Сумма скидки"
 
       - name: line_amount
@@ -112,7 +179,52 @@ models:
 
       - name: is_confirmed
         description: "Флаг подтвержденного заказа"
-      
-      
+
+
+  - name: dim_customers
+    description: "Одна строка - один клиент"
+    columns:
+      - name: customer_id
+        description: "Идентификатор клиента"
+        data_tests:
+          - unique
+          - not_null
+
+      - name: registered_at
+        description: "Время регистрации"
+
+      - name: registration_date
+        description: "Дата регитсрации"
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_dates')
+                field: date_day
+
+      - name: city
+        description: "Город"
+
+      - name: acquisition_channel
+        description: "Канал привлечения клиента"
+
+      - name: first_confirmed_order_id
+        description: "Номер первого подтвержденного заказа(если есть)"
+
+      - name: first_confirmed_at
+        description: "Время создания первого подтвержденного заказа(если есть)"
+
+      - name: confirmed_orders_count
+        description: "Число подтвержденных заказов"
+
+      - name: confirmed_revenue
+        description: "Подтвержденная сумма заказов"
+
+      - name: is_buyer
+        description: "Флаг подтвержденного (хотя бы одного) заказа у клиента"
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [true, false]
+  
 
 

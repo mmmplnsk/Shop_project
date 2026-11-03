@@ -7,6 +7,7 @@ order_items as(
 )
 
 select
+    oi.order_id,
     oi.product_id,
     op.customer_id,
     oi.quantity,
