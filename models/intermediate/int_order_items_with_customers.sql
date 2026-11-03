@@ -16,3 +16,4 @@ select
     op.is_confirmed
 from order_items oi
 left join orders_with_payments op on oi.order_id = op.order_id
+where op.is_test_order = false
