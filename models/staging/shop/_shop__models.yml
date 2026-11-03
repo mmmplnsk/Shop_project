@@ -94,14 +94,14 @@ models:
           - unique,
           - not_null
       
-      - name: category_id
-        description: "Номер категории товара"
+      - name: category
+        description: "Название категории товара"
         data_tests:
           - not_null
           - relationships:
               arguments:
-                to: stg_shop__product_categories
-                field: category_id
+                to: ref('stg_shop__product_categories')
+                field: category_name
       
       - name: brand
         description: "Изготовитель товара"
