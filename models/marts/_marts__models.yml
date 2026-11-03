@@ -42,6 +42,9 @@ models:
         description: "Заказ с > 0 успешных оплат"
         data_tests:
           - not_null
+      
+      - name: items_count
+        description: "Число различных товаров в заказе"
 
   
   - name: dim_dates
