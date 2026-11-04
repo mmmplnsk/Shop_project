@@ -1,3 +1,8 @@
+{{ config(
+    distributed_replicated = true
+)}}
+
+
 select
     customer_id,
     registered_at,

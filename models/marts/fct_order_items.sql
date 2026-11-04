@@ -1,3 +1,8 @@
+{{ config(
+    distributed_by='order_id',
+    orientation = 'column'
+)}}
+
 select
     order_id,
     product_id,

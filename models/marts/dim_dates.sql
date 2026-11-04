@@ -1,3 +1,8 @@
+{{ config(
+    distributed_replicated = true
+)}}
+
+
 with date_spine as (
     select generate_series(
         '2026-01-01'::date, 

@@ -61,7 +61,7 @@ models:
         description: "Дата первого успешного платежа"
 
       - name: is_confirmed
-        description: "Заказ с > 0 успешных оплат"
+        description: '{{doc("confirmed_order")}}'
         data_tests:
           - not_null
       
@@ -178,7 +178,9 @@ models:
         description: "Сумма позиции в заказе"
 
       - name: is_confirmed
-        description: "Флаг подтвержденного заказа"
+        description: '{{doc("confirmed_order")}}'
+        data_tests:
+          - not_null
 
 
   - name: dim_customers
