@@ -8,7 +8,7 @@ The project covers data modeling, SQL-based transformations, distributed data pr
 
 ## Project Structure
 
-### dbt (models/, macros/, tests/)
+### dbt (models/, macros/, tests/, init/)
 
 - SQL-based data transformations.
 - Staging, intermediate, and data mart models.
